@@ -6,9 +6,10 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@sap-cloud-sdk/http-client": "^3.15.0",
     "@sap/cds": "^7",
-    "express": "^4",
-    "@sap/xssec": "^3"
+    "@sap/xssec": "^3",
+    "express": "^4"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -17,11 +18,35 @@
     "eslint": "^9"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "start-development": "cds watch --port 4001 --profile development"
   },
   "cds": {
     "requires": {
-      "auth": "xsuaa"
+      "contactset": {
+        "kind": "odata-v2",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[development]": {
+          "credentials": {
+            "destination": "ES5"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "ES5"
+          }
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa",
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": ":memory:"
+          }
+        }
+      }
     }
   }
 }
