@@ -33,7 +33,21 @@ module.exports = cds.service.impl(async function (req,res,next) {
 			}
 		})
 
+		console.log(aTeamMembers);
+
 		return aTeamMembers;
 
+	});
+
+	this.on('CREATE', Contacts, async(req, next) => {
+		if (req.data.ID) {
+			req.next();
+		} else {
+			req.reject ({
+				code: 'Invalid create',
+				message: 'Dataobject missing ID',
+				status: 420
+			})
+		}
 	});
 });
