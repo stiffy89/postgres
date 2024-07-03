@@ -50,4 +50,8 @@ module.exports = cds.service.impl(async function (req,res,next) {
 			})
 		}
 	});
+
+	this.on('READ', Contacts, async(req, next) => {
+		return next();
+	})
 });
