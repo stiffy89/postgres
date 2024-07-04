@@ -9,6 +9,10 @@ module.exports = cds.service.impl(async function (req,res,next) {
 
 	let srv = this;
 
+	this.on('*', (req) => {
+		console.log(req);
+	});
+
 	//using external service
 	this.on('READ', Team, async (req, next) => {
 		//we can actually get the roles of the logged in user here by looking at req.user from the request coming through
@@ -33,25 +37,25 @@ module.exports = cds.service.impl(async function (req,res,next) {
 			}
 		})
 
-		console.log(aTeamMembers);
+		return aTeamMembers
 
-		return aTeamMembers;
-
+		
 	});
+
+	this.on('*', Contacts, async(req, next) => {
+		console.log(req);
+		return next();
+	})
 
 	this.on('CREATE', Contacts, async(req, next) => {
-		if (req.data.ID) {
-			req.next();
-		} else {
-			req.reject ({
-				code: 'Invalid create',
-				message: 'Dataobject missing ID',
-				status: 420
-			})
-		}
-	});
+		return next();
+	})
+
+	
 
 	this.on('READ', Contacts, async(req, next) => {
-		return next();
+		const results = await SELECT.from(Contacts);
+		console.log(results);
+		return results;
 	})
 });
